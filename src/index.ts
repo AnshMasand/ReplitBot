@@ -2,8 +2,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { Telegraf } from "telegraf";
-
+import cheerio from 'cheerio';
 import { createReadStream, existsSync, mkdirSync } from "fs";
+import axios from 'axios';
 
 
 const workDir = "./tmp";
@@ -33,7 +34,10 @@ bot.on("message", async (ctx) => {
     ctx.reply("Please send a text message.");
     return;
   }
-
+  
+  const response = await axios.get('https://replit.com/bounties');
+  const $ = cheerio.load(response.data);
+  console.log($);
   console.log("Input: ", text);
 
   await ctx.sendChatAction("typing");
